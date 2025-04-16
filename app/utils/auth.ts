@@ -21,4 +21,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   pages: {
     verifyRequest: "/verify",
   },
+  // This ensures Auth.js trusts the host, even when behind a proxy
+  // Fixes the UntrustedHost error
+  trustHost: true,
 });
