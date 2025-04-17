@@ -11,7 +11,8 @@ import { hash as argonHash, verify as argonVerify } from "argon2";
 // validate env once at startup
 const env = z
   .object({
-    AUTH_SECRET: z.string().min(1),
+    NEXTAUTH_URL: z.string().url(),
+    NEXTAUTH_SECRET: z.string().min(1),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GITHUB_CLIENT_ID: z.string().min(1),
@@ -21,7 +22,8 @@ const env = z
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
-  secret: env.AUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
+  trustHost: true,
   session: { strategy: "database", maxAge: 30 * 24 * 60 * 60 },
   providers: [
     GoogleProvider({

@@ -1,14 +1,13 @@
 // app/actions/credentialsLogin.ts
 "use server";
 
-import { signIn } from "next-auth/react";
 import prisma from "@/app/utils/db";
 import { verify as argonVerify, hash as argonHash } from "argon2";
 import type { LoginForm } from "@/types";
 import { cookies, headers } from "next/headers";
 
 const MAX_FAILED = 5;
-const WINDOW_MS = 15 * 60 * 1000; // 15 min
+const WINDOW_MS = 15 * 60 * 1000; // 15 min
 
 export async function credentialsLogin(form: LoginForm) {
   const { email, password } = form;
@@ -74,14 +73,6 @@ export async function credentialsLogin(form: LoginForm) {
     throw new Error("Invalid credentials");
   }
 
-  // 6. Finally, call NextAuth’s signIn (redirect: false so we can handle errors)
-  const res = await signIn("credentials", {
-    email,
-    password,
-    redirect: false,
-  });
-
-  if (res?.error) {
-    throw new Error(res.error);
-  }
+  // 6. Return success (the client will handle the redirection)
+  return { success: true };
 }
